@@ -33,7 +33,7 @@ def driver():
     print("Listing undetermined sequences for review...")
     print("-------------------------")
 
-    for sequence in categorized_sequences[-1]:
+    for sequence in categorized_sequences["undetermined"]:
         print(sequence)
 
 # Returns 0 for DNA (Contains "T" bases)
@@ -55,9 +55,9 @@ def categorize_strand(strand):
     has_both_bases = (is_t_present and is_u_present)
     has_neither_base = (not is_t_present and not is_u_present)
     if (has_both_bases or has_neither_base):
-        return -1
+        return "undetermined"
 
-    return 0 if is_t_present else 1
+    return "rna" if is_t_present else "dna"
 
 def encode_strand(strand):
     if not strand:
@@ -70,10 +70,11 @@ def encode_strand(strand):
         if strand[index - 1] == strand[index]:
             count += 1
         else:
-            new_entry = strand[index - 1] + count
+            new_entry = strand[index - 1] + str(count)
             encoding.append(new_entry)
             count = 1
 
+    encoding.append(strand[-1] + str(count))
     return "".join(encoding)
 
 def decode_strand(encoding):

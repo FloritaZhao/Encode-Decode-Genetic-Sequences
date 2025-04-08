@@ -22,9 +22,9 @@ def driver():
     print("-------------------------")
 
     categorized_sequences = {}
-    categorized_sequences[-1] = []  # strands that can't be determined
-    categorized_sequences[0] = []  # dna strands
-    categorized_sequences[1] = []  # rna strands
+    categorized_sequences["undetermined"] = []  # strands that can't be determined
+    categorized_sequences["dna"] = []  # dna strands
+    categorized_sequences["rna"] = []  # rna strands
 
     for sequence in encoded_sequences:
         category = categorize_strand(sequence)
@@ -34,7 +34,7 @@ def driver():
     print("Decoding and listing undetermined sequences for review...")
     print("-------------------------")
 
-    for sequence in categorized_sequences[-1]:
+    for sequence in categorized_sequences["undetermined"]:
         decoded = decode_strand(sequence)
         print(decoded)
 
@@ -48,7 +48,7 @@ def categorize_strand(strand):
     is_t_present = False
     is_u_present = False
 
-    for index in range(0, len(strand) - 1, 4):
+    for index in range(0, len(strand) - 1, 2):
         base = strand[index]
         if base == "T":
             is_t_present = True
@@ -59,6 +59,6 @@ def categorize_strand(strand):
     has_both_bases = is_t_present and is_u_present
     has_neither_base = (not is_t_present) and (not is_u_present)
     if (has_both_bases or has_neither_base):
-        return -1
+        return "undetermined"
 
-    return 0 if is_t_present else 1
+    return "dna" if is_t_present else "rna"
